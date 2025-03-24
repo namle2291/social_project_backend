@@ -11,8 +11,11 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre("save", async function () {
-  const myPlaintextPassword = this.password;
-  this.password = await bcrypt.hash(myPlaintextPassword, saltRounds);
+  this.password = await bcrypt.hash(this.password, saltRounds);
+});
+
+UserSchema.method("checkPassword", async function (password) {
+  return await bcrypt.compare(password, this.password);
 });
 
 const userModal = mongoose.model("User", UserSchema);
