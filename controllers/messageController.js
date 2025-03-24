@@ -16,6 +16,22 @@ class MessageController {
         });
       });
   }
+
+  async getMessage(req, res) {
+    const { sender_id, receiver_id } = req.body;
+
+    await messageModel
+      .find({ sender_id, receiver_id })
+      .then((data) => {
+        return res.json({ success: true, data });
+      })
+      .catch(() => {
+        return res.json({
+          success: false,
+          message: "Có lỗi xảy ra, vui lòng thử lại sau!",
+        });
+      });
+  }
 }
 
 module.exports = new MessageController();
